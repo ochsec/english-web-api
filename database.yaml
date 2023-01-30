@@ -1,0 +1,57 @@
+# aws cloudformation deploy \ 
+# --template-file database.yaml \
+# --stack-name mysqlserverexpress \
+# --parameter-overrides $(cat database.parameters | tr '\n' ' ') \
+# --profile default
+
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: CloudFormation Template for creating an Amazon RDS instance with SQL Server Express Edition.
+
+Parameters:
+  DBInstanceClass:
+    Type: String
+    Default: db.t2.micro
+    AllowedValues: [ db.t2.micro, db.t2.small, etc]
+    Description: The DB instance class for the RDS instance. 
+  DBName:
+    Type: String
+    Description: The database name.
+  RDSSecurityGroupName:
+    Type: String
+    Description: The security group name
+  AdminName:
+    Type: String
+    Description: DB admin name
+  AdminPass:
+    Type: String
+    Description: DB admin password
+
+Resources:
+  RDSDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: !Ref DBInstanceClass
+      Engine: sqlserver-ex
+      AllocatedStorage: 20
+      EngineVersion: 14.00.3451.2.v1
+      MasterUsername: !Ref AdminName
+      MasterUserPassword: !Ref AdminPass
+      PubliclyAccessible: false
+      MultiAZ: false
+      BackupRetentionPeriod: 7
+      DBInstanceIdentifier: mysqlserverexpress
+      VPCSecurityGroups:
+       - !Ref RDSSecurityGroupName
+      AvailabilityZone: us-east-1a
+
+Outputs:
+  RDSDBInstanceEndpointAddress:
+    Description: The endpoint address of the new RDS DB Instance
+    Value: !GetAtt RDSDBInstance.Endpoint.Address
+  RDSDBInstanceEndpointPort:
+    Description: The endpoint port of the new RDS DB Instance
+    Value: !GetAtt RDSDBInstance.Endpoint.Port
+  RDSDBInstanceDBName:
+    Description: The database name of the new RDS DB Instance
+    Value: !Ref DBName
