@@ -1,2 +1,5 @@
 database.parameters
 venv
+dbinstance.sh
+__pycache__
+.env
