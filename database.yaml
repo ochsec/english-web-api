@@ -43,6 +43,7 @@ Resources:
       DBInstanceIdentifier: mysqlserverexpress
       VPCSecurityGroups:
        - !Ref RDSSecurityGroupName
+      PubliclyAccessible: true
       AvailabilityZone: us-east-1a
 
 Outputs:
