@@ -21,5 +21,5 @@ DROP TABLE IF EXISTS sales.stores;
 
 -- drop the schemas
 
-DROP SCHEMA IF EXISTS sales;
-DROP SCHEMA IF EXISTS production;
+DROP DATABASE IF EXISTS sales;
+DROP DATABASE IF EXISTS production;

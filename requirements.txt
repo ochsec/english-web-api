@@ -1,2 +1,2 @@
-pymssql
+pymysql
 python-dotenv

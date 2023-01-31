@@ -8,36 +8,38 @@ Version: 1.0
 --------------------------------------------------------------------
 */
 -- create schemas
-CREATE SCHEMA production;
-go
+CREATE DATABASE production;
 
-CREATE SCHEMA sales;
-go
+CREATE DATABASE sales;
 
 -- create tables
 CREATE TABLE production.categories (
-	category_id INT IDENTITY (1, 1) PRIMARY KEY,
-	category_name VARCHAR (255) NOT NULL
+  category_id INT,
+  category_name VARCHAR(255) NOT NULL,
+  PRIMARY KEY (category_id)
 );
 
 CREATE TABLE production.brands (
-	brand_id INT IDENTITY (1, 1) PRIMARY KEY,
-	brand_name VARCHAR (255) NOT NULL
+	brand_id INT, 
+	brand_name VARCHAR (255) NOT NULL,
+	PRIMARY KEY (brand_id)
 );
 
 CREATE TABLE production.products (
-	product_id INT IDENTITY (1, 1) PRIMARY KEY,
+	product_id INT,
 	product_name VARCHAR (255) NOT NULL,
 	brand_id INT NOT NULL,
 	category_id INT NOT NULL,
 	model_year SMALLINT NOT NULL,
 	list_price DECIMAL (10, 2) NOT NULL,
+	PRIMARY KEY (product_id),
 	FOREIGN KEY (category_id) REFERENCES production.categories (category_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (brand_id) REFERENCES production.brands (brand_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+
 CREATE TABLE sales.customers (
-	customer_id INT IDENTITY (1, 1) PRIMARY KEY,
+	customer_id INT,
 	first_name VARCHAR (255) NOT NULL,
 	last_name VARCHAR (255) NOT NULL,
 	phone VARCHAR (25),
@@ -45,22 +47,24 @@ CREATE TABLE sales.customers (
 	street VARCHAR (255),
 	city VARCHAR (50),
 	state VARCHAR (25),
-	zip_code VARCHAR (5)
+	zip_code VARCHAR (5),
+	PRIMARY KEY (customer_id)
 );
 
 CREATE TABLE sales.stores (
-	store_id INT IDENTITY (1, 1) PRIMARY KEY,
+	store_id INT,
 	store_name VARCHAR (255) NOT NULL,
 	phone VARCHAR (25),
 	email VARCHAR (255),
 	street VARCHAR (255),
 	city VARCHAR (255),
 	state VARCHAR (10),
-	zip_code VARCHAR (5)
+	zip_code VARCHAR (5),
+	PRIMARY KEY (store_id)
 );
 
 CREATE TABLE sales.staffs (
-	staff_id INT IDENTITY (1, 1) PRIMARY KEY,
+	staff_id INT,
 	first_name VARCHAR (50) NOT NULL,
 	last_name VARCHAR (50) NOT NULL,
 	email VARCHAR (255) NOT NULL UNIQUE,
@@ -68,12 +72,13 @@ CREATE TABLE sales.staffs (
 	active tinyint NOT NULL,
 	store_id INT NOT NULL,
 	manager_id INT,
+	PRIMARY KEY (staff_id),
 	FOREIGN KEY (store_id) REFERENCES sales.stores (store_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (manager_id) REFERENCES sales.staffs (staff_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
 CREATE TABLE sales.orders (
-	order_id INT IDENTITY (1, 1) PRIMARY KEY,
+	order_id INT,
 	customer_id INT,
 	order_status tinyint NOT NULL,
 	-- Order status: 1 = Pending; 2 = Processing; 3 = Rejected; 4 = Completed
@@ -82,10 +87,12 @@ CREATE TABLE sales.orders (
 	shipped_date DATE,
 	store_id INT NOT NULL,
 	staff_id INT NOT NULL,
+	PRIMARY KEY (order_id),
 	FOREIGN KEY (customer_id) REFERENCES sales.customers (customer_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (store_id) REFERENCES sales.stores (store_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (staff_id) REFERENCES sales.staffs (staff_id) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
+
 
 CREATE TABLE sales.order_items (
 	order_id INT,

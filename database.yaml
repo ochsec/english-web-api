@@ -32,9 +32,8 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       DBInstanceClass: !Ref DBInstanceClass
-      Engine: sqlserver-ex
-      AllocatedStorage: 20
-      EngineVersion: 14.00.3451.2.v1
+      Engine: mysql
+      AllocatedStorage: 10
       MasterUsername: !Ref AdminName
       MasterUserPassword: !Ref AdminPass
       PubliclyAccessible: false
