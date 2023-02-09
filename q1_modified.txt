@@ -1,0 +1,39 @@
+Write a SQL query to list all the films that actor "Julia Zellweger" was in and sort the films by category.
+Use the following table schemas as a reference:
+TABLE category (
+    category_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(25) NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY  (category_id)
+)
+TABLE film_actor (
+    actor_id SMALLINT UNSIGNED NOT NULL,
+    film_id SMALLINT UNSIGNED NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY  (actor_id,film_id),
+    KEY idx_fk_film_id (`film_id`),
+    CONSTRAINT fk_film_actor_actor FOREIGN KEY (actor_id) REFERENCES actor (actor_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_film_actor_film FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+TABLE film_category (
+    film_id SMALLINT UNSIGNED NOT NULL,
+    category_id TINYINT UNSIGNED NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (film_id, category_id),
+    CONSTRAINT fk_film_category_film FOREIGN KEY (film_id) REFERENCES film (film_id) ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT fk_film_category_category FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE RESTRICT ON UPDATE CASCADE
+)
+TABLE language (
+    language_id TINYINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name CHAR(20) NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (language_id)
+)
+TABLE actor (
+    actor_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    first_name VARCHAR(45) NOT NULL,
+    last_name VARCHAR(45) NOT NULL,
+    last_update TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY  (actor_id),
+    KEY idx_actor_last_name (last_name)
+)

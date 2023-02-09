@@ -1,4 +1,6 @@
 import string
+import openai
+from dotenv import dotenv_values
 
 class GptUtil:
 
@@ -14,7 +16,7 @@ class GptUtil:
         words = self.remove_punctuation(txt).split(' ')
         for word in words:
             for schema in self.schema_feed.schema_list:
-                if word.lower().__contains__(schema.lower()):
+                if schema.lower().__contains__(word.lower()):
                     relevant_schemas.append(schema)
         return [*set(relevant_schemas)]
 
@@ -24,3 +26,18 @@ class GptUtil:
             txt += '\n' + self.schema_feed.schema_feed[schema]
         return txt
 
+    def get_completion(self, prompt, gpt_params):
+        env_config = dotenv_values('.env')
+        openai.api_key = env_config['OpenAiKey']
+
+        response = openai.Completion.create(
+            model=gpt_params['model'],
+            prompt=prompt,
+            temperature=gpt_params['temperature'],
+            max_tokens=gpt_params['max_tokens'],
+            top_p=gpt_params['top_p'],
+            frequency_penalty=gpt_params['frequency_penalty'],
+            presence_penalty=gpt_params['presence_penalty']
+        )
+
+        return response
