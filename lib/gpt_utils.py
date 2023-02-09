@@ -1,12 +1,11 @@
 import string
-from ..database.schema_feed import SchemaFeed
 
-class Util:
+class GptUtil:
 
-    def __init__(self):
-        self.schema_feed = SchemaFeed()
+    def __init__(self, schema_feed):
+        self.schema_feed = schema_feed
 
-    def remove_punctuation(txt):
+    def remove_punctuation(self, txt):
         new_txt = txt.translate(str.maketrans('', '', string.punctuation))
         return new_txt
 
@@ -17,7 +16,7 @@ class Util:
             for schema in self.schema_feed.schema_list:
                 if word.lower().__contains__(schema.lower()):
                     relevant_schemas.append(schema)
-        return relevant_schemas
+        return [*set(relevant_schemas)]
 
     def add_relevant_schemas(self, txt):
         schemas_to_add = self.get_relevant_schemas(txt)
