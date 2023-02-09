@@ -1,5 +1,5 @@
 database.parameters
 venv
-dbinstance.sh
+deploydb.sh
 __pycache__
 .env
